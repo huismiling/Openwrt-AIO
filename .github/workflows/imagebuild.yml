@@ -28,18 +28,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [x86-64, ramips-mt7621, rockchip-armv8]
+        target: [ramips-mt7621]
 
     steps:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: 配置RCLONE
-        uses: NiceLabs/rclone-action@master
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
         with:
-          github-token: ${{ secrets.SECRET_TOKEN }}
-          config: ${{ secrets.RCLONE_CONFIG }}
-          config-secret-name: RCLONE_CONFIG
+          rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
       - name: 准备环境
         run: |
