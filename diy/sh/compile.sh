@@ -1,12 +1,12 @@
 #!/bin/bash
-# chown -R 1000:1000 /tmp/build
+# chown -R 1000:1000 /builder
 # 修复upx异常
 apt-get update >> /dev/null 2>&1 
 apt-get install upx git automake -y >> /dev/null 2>&1 
 ln -s /usr/bin/upx staging_dir/host/bin/upx
 
 # 添加并安装源
-echo "src-link custom /tmp/build/custom-feed/feeds" >> feeds.conf.default
+echo "src-link custom /builder/git_workspace/feeds" >> feeds.conf.default
 ./scripts/feeds update -a >> /dev/null 2>&1 
 ./scripts/feeds install -p custom -a >> /dev/null 2>&1 
 
@@ -14,13 +14,13 @@ cp -rf custom.config .config
 make defconfig >> /dev/null 2>&1 
 
 # 获取编译的包列表
-cd /tmp/build/custom-feed
+cd /builder/git_workspace
 if [[ $1 == "true" ]];then
   ipk_list=($(git log --name-status | grep -oP '(?<=feeds/)[-\w]+(?=/)' | sort | uniq))
 else
   ipk_list=($(git log -1 --name-status | grep -oP '(?<=feeds/)[-\w]+(?=/)' | sort | uniq))
 fi
-cd /tmp/build/openwrt
+cd /builder/
 
 # 编译
 make package/feeds/luci/luci-base/compile -j2
@@ -50,15 +50,15 @@ mvKmod "kmod-r8125*.ipk"
 
 # 删除旧的ipk
 if [[ $1 == "true" ]];then
-  rm -rf /tmp/build/packages/*
+  rm -rf /builder/packages/*
 else
   for newipk in `ls $target_path`; do
-    rm -f /tmp/build/packages/${newipk%%_*}_*
+    rm -f /builder/packages/${newipk%%_*}_*
   done
 fi
 
 # 生成索引
-mv /tmp/build/packages/* $target_path
+mv /builder/packages/* $target_path
 make package/index >> /dev/null 2>&1 
-mv $target_path/* /tmp/build/packages
+mv $target_path/* /builder/packages
 
