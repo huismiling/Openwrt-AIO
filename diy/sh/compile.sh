@@ -1,8 +1,8 @@
 #!/bin/bash
-sudo chown -R 1000:1000 /home/build
+chown -R 1000:1000 /home/build
 # 修复upx异常
-sudo apt-get update >> /dev/null 2>&1 
-sudo apt-get install upx git automake -y >> /dev/null 2>&1 
+apt-get update >> /dev/null 2>&1 
+apt-get install upx git automake -y >> /dev/null 2>&1 
 ln -s /usr/bin/upx staging_dir/host/bin/upx
 
 # 添加并安装源
