@@ -60,7 +60,7 @@ jobs:
 
       - name: 编译
         if: github.event.inputs.ssh != 'true'
-        run: docker exec  imagebuilder /bin/bash /home/build/openwrt/imagebuild.sh
+        run: docker exec imagebuilder /bin/bash /home/build/openwrt/imagebuild.sh
 
       - name: 编译完成后清理
         run: |

@@ -1,4 +1,8 @@
 #!/bin/bash
+set -x
+echo $USER
+echo $PWD
+ls -l 
 chown -R 1000:1000 /home/build
 
 # 添加签名验证
