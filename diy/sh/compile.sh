@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 # chown -R 1000:1000 /builder
 # 修复upx异常
 apt-get update >> /dev/null 2>&1 
