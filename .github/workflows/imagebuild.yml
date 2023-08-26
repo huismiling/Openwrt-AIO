@@ -43,8 +43,10 @@ jobs:
         run: |
           sudo mkdir -p /workdir
           sudo chown $USER:$GROUPS /workdir
+          echo $USER #GROUPS
           mkdir -p /workdir/packages/
           mkdir -p /workdir/error/
+          sudo chmod 777 /workdir -R
           rclone copy $REMOTE_PATH/$VERSION/${{matrix.target}} /workdir/packages/ || true
           docker run -dt --name imagebuilder \
             -v /workdir/packages/:/builder/packages/  \
