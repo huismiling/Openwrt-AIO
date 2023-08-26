@@ -46,14 +46,13 @@ jobs:
           mkdir -p /workdir/packages/
           mkdir -p /workdir/error/
           rclone copy $REMOTE_PATH/$VERSION/${{matrix.target}} /workdir/packages/ || true
-          echo "${{ secrets.SECRET_KEY }}" > /workdir/key-build
-          docker run -dt --name imagebuilder -v /workdir/packages/:/tmp/build/openwrt/packages/  \
-              -v $GITHUB_WORKSPACE/diy/sh/target/${{matrix.target}}.sh:/tmp/build/openwrt/target.sh \
-              -v $GITHUB_WORKSPACE/diy/sh/imagebuild.sh:/tmp/build/openwrt/imagebuild.sh \
-              -v $GITHUB_WORKSPACE/diy/files/${{matrix.target}}/:/tmp/build/openwrt/files/  \
-              -v $GITHUB_WORKSPACE/diy/tool/:/tmp/build/openwrt/tool/ \
-              -v /workdir/bin/target/:/tmp/build/openwrt/bin/targets/  \
-              openwrt/imagebuilder:${{matrix.target}}-$VERSION
+          docker run -dt --name imagebuilder \
+            -v /workdir/packages/:/builder/packages/  \
+            -v $GITHUB_WORKSPACE/diy/sh/target/${{matrix.target}}.sh:/builder/target.sh \
+            -v $GITHUB_WORKSPACE/diy/files/${{matrix.target}}/:/builder/files/  \
+            -v $GITHUB_WORKSPACE/:/builder/git_workspace/ \
+            -v /workdir/bin/target/:/builder/bin/targets/  \
+            openwrt/imagebuilder:${{matrix.target}}-$VERSION
 
       - name: SSH connection to Actions
         if: github.event.inputs.ssh == 'true'
@@ -61,7 +60,7 @@ jobs:
 
       - name: 编译
         if: github.event.inputs.ssh != 'true'
-        run: docker exec imagebuilder /bin/bash /tmp/build/openwrt/imagebuild.sh
+        run: docker exec imagebuilder /bin/bash /builder/imagebuild.sh
 
       - name: 编译完成后清理
         run: |
@@ -97,5 +96,5 @@ jobs:
           tag: Openwrt_${{env.VERSION}}_${{matrix.target}}
           commit: main
           replacesArtifacts: true
-          token: ${{ secrets.SECRET_TOKEN }}
+          token: ${{ secrets.GIT_TOKEN }}
           artifacts: /workdir/image/*
