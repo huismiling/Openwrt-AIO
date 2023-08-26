@@ -46,7 +46,6 @@ jobs:
           echo $USER #GROUPS
           mkdir -p /workdir/packages/
           mkdir -p /workdir/error/
-          sudo chmod 777 /workdir -R
           rclone copy $REMOTE_PATH/$VERSION/${{matrix.target}} /workdir/packages/ || true
           docker run -dt --name imagebuilder \
             -v /workdir/packages/:/builder/packages/  \
@@ -55,6 +54,8 @@ jobs:
             -v $GITHUB_WORKSPACE/:/builder/git_workspace/ \
             -v /workdir/bin/target/:/builder/bin/targets/  \
             openwrt/imagebuilder:${{matrix.target}}-$VERSION
+          sudo chmod 777 /workdir -R
+
 
       - name: SSH connection to Actions
         if: github.event.inputs.ssh == 'true'
