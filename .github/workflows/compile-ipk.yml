@@ -57,8 +57,8 @@ jobs:
             -v $GITHUB_WORKSPACE/diy/files/${{matrix.target}}/:/builder/files/  \
             -v $GITHUB_WORKSPACE/:/builder/git_workspace/ \
             -v $GITHUB_WORKSPACE/diy/config/${{matrix.target}}.config:/builder/custom.config \
-            -v /workdir/bin/target/:/builder/bin/targets/  \
-            openwrt/imagebuilder:${{matrix.target}}-$VERSION
+            -v /workdir/bin/:/builder/bin/  \
+            openwrt/sdk:${{matrix.target}}-$VERSION
           sudo chmod 777 /workdir -R
 
       - name: SSH connection to Actions

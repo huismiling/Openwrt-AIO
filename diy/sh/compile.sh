@@ -8,11 +8,11 @@ ln -s /usr/bin/upx staging_dir/host/bin/upx
 
 # 添加并安装源
 echo "src-link custom /builder/git_workspace/feeds" >> feeds.conf.default
-./scripts/feeds update -a >> /dev/null 2>&1 
-./scripts/feeds install -p custom -a >> /dev/null 2>&1 
+./scripts/feeds update -a
+./scripts/feeds install -a
 
 cp -rf custom.config .config
-make defconfig >> /dev/null 2>&1 
+make defconfig
 
 # 获取编译的包列表
 cd /builder/git_workspace
