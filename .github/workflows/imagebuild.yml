@@ -52,7 +52,7 @@ jobs:
             -v $GITHUB_WORKSPACE/diy/sh/target/${{matrix.target}}.sh:/builder/target.sh \
             -v $GITHUB_WORKSPACE/diy/files/${{matrix.target}}/:/builder/files/  \
             -v $GITHUB_WORKSPACE/:/builder/git_workspace/ \
-            -v /workdir/bin/target/:/builder/bin/targets/  \
+            -v /workdir/bin/:/builder/bin/  \
             openwrt/imagebuilder:${{matrix.target}}-$VERSION
           sudo chmod 777 /workdir -R
 

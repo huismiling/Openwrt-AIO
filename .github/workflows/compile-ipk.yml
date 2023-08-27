@@ -53,6 +53,7 @@ jobs:
           mkdir -p /workdir/error/
           rclone copy $REMOTE_PATH/$VERSION/${{matrix.target}} /workdir/packages/ || true
           docker run -dt --name imagebuilder \
+            -v /workdir/packages/:/builder/packages/  \
             -v $GITHUB_WORKSPACE/diy/sh/compile.sh:/builder/compile.sh \
             -v $GITHUB_WORKSPACE/diy/files/${{matrix.target}}/:/builder/files/  \
             -v $GITHUB_WORKSPACE/:/builder/git_workspace/ \
