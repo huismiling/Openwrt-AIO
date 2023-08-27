@@ -1,13 +1,10 @@
 #!/bin/bash
 set -x
 # chown -R 1000:1000 /builder
-# 修复upx异常
-apt-get update >> /dev/null 2>&1 
-apt-get install upx git automake -y >> /dev/null 2>&1 
-ln -s /usr/bin/upx staging_dir/host/bin/upx
 
 # 添加并安装源
-echo "src-link custom /builder/git_workspace/feeds" >> feeds.conf.default
+cp -rdp /builder/git_workspace/feeds/ /builder/custom_feeds
+echo "src-link custom /builder/custom_feeds" >> feeds.conf.default
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
