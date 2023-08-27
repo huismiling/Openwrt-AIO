@@ -68,7 +68,7 @@ jobs:
 
       - name: 编译
         if: github.event.inputs.ssh != 'true'
-        run: docker exec sdk /bin/bash /builder/compile.sh ${{ github.event.inputs.rebuild }}
+        run: docker exec imagebuilder /bin/bash /builder/compile.sh ${{ github.event.inputs.rebuild }}
 
       - name: 编译完成后清理
         run: |
