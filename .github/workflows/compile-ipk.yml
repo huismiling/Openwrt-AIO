@@ -72,7 +72,7 @@ jobs:
 
       - name: 编译完成后清理
         run: |
-          docker rm -f sdk
+          docker rm -f imagebuilder
           if [`ls -A /workdir/error/` == ""] ;then
             echo "compile_error=false" >> $GITHUB_ENV
           else

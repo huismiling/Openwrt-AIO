@@ -22,11 +22,12 @@ cd /builder/
 
 # 编译
 make package/feeds/luci/luci-base/compile -j2
-for ipk in ${ipk_list[@]}
-{
-  echo "start compile $ipk"
-  make package/feeds/custom/$ipk/compile -j2    || make package/$ipk/compile V=s >> error/error_$ipk.log 2>&1 
-}
+# for ipk in ${ipk_list[@]}
+# {
+#   echo "start compile $ipk"
+#   make package/feeds/custom/$ipk/compile -j2    || make package/$ipk/compile V=s >> error/error_$ipk.log 2>&1 
+# }
+make package/feeds/custom/brook/compile -j2
 target_path=`find bin/packages -name custom`
 
 # 解决单编译kmod 导致package不存在问题
