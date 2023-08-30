@@ -4,7 +4,7 @@ set -x
 
 # 添加并安装源
 cp -rdp /builder/git_workspace/feeds/ /builder/custom_feeds
-echo "src-link custom /builder/custom_feeds" >> feeds.conf.default
+echo "src-link custom $PWD/custom_feeds" >> feeds.conf.default
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 
@@ -29,6 +29,7 @@ make package/feeds/luci/luci-base/compile -j2
 # }
 make package/feeds/custom/brook/compile -j2
 target_path=`find bin/packages -name custom`
+echo "target_path: " $target_path
 
 # 解决单编译kmod 导致package不存在问题
 if [[ ${target_path} == "" ]];then
@@ -57,7 +58,7 @@ else
 fi
 
 # 生成索引
-mv /builder/packages/* $target_path
-make package/index >> /dev/null 2>&1 
-mv $target_path/* /builder/packages
+cp -rdp /builder/packages/* $target_path
+make package/index
+cp -rdp $target_path/* /builder/packages
 
